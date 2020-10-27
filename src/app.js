@@ -13,6 +13,8 @@ const repositories = [];
 function checkIsValidId(request, response, next) {
   const { id } = request.params;
 
+
+
   if ( !uuidValidate(id) ) {
     return response.status(400).json({ error: "This ID is invalid!"});
   }
@@ -38,13 +40,13 @@ app.get("/repositories", (request, response) => {
 });
 
 app.post("/repositories", (request, response) => {
-  const { title, url, techs } = request.body;
+  const { url, title, techs } = request.body;
 
   let repository = {
     id: uuid(),
     title,
     url,
-    techs: techs.split(', '),
+    techs,
     likes: 0
   };
 
@@ -76,7 +78,7 @@ app.delete("/repositories/:id", checkIsValidId, checkExistProject, (request, res
     }
   });
 
-  return response.send();
+  return response.status(204).send();
 });
 
 app.post("/repositories/:id/like", checkIsValidId, checkExistProject, (request, response) => {
